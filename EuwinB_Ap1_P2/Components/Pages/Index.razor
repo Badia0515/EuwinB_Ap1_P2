@@ -1,0 +1,30 @@
+﻿@page "/counter"
+@rendermode InteractiveServer
+
+<div class="container">
+
+    <div class="d-flex justify-content-between ">
+        <h4>Index</h4>
+        <button class="btn btn-primary bi bi-plus" @onclick="">Crear</button>
+    </div>
+    @*Filtrar*@
+    <div class="card border-3">
+        <div class="d-flex" style="gap:200px">
+            <h6>Filtrar Por</h6>
+            <h6>Busqueda</h6>
+        </div>     
+        <div class="d-flex gap-5">
+            <select style="width:200px"@bind="">
+                <option></option>
+               
+            </select>
+            <input type="text" placeholder="Buscar"@bind="" />
+            <button class="btn btn-warning bi bi-search"@onclick=""></button>
+        </div>
+       
+    </div>
+</div>
+
+@code {
+    
+}

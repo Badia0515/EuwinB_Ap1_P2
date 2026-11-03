@@ -1,0 +1,16 @@
+# Visual Studio
+.vs/
+.vscode/
+
+# Archivos compilados
+bin/
+obj/
+
+# Archivos temporales
+*.user
+*.suo
+*.cache
+
+# Sistema
+Thumbs.db
+.DS_Store
