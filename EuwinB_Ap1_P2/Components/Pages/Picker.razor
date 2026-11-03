@@ -1,0 +1,22 @@
+﻿<div class="col-auto input-group align-items-center">
+    <label class="col-form-label input-group-text">Seleciones</label>
+
+    <InputSelect class="form-control form-select">
+        <option>Seleciones una</option>
+        
+    </InputSelect>
+    <InputNumber class="form-control"/>
+    <button type="button" class="btn btn bg-primary  bi bi-plus" @onclick=""></button>
+</div>
+@*Error*@
+@if (Error != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @Error
+    </div>
+}
+
+@code {
+    public string Error{ get; set; }
+
+}
