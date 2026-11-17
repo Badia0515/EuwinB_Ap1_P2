@@ -11,7 +11,7 @@ builder.Services.AddRazorComponents()
 var Conexion = builder.Configuration.GetConnectionString("Conexion");
 builder.Services.AddDbContextFactory<VentaDeCafeContext>(options => options.UseSqlite(Conexion));
 builder.Services.AddScoped<VentaServices>();
-
+builder.Services.AddScoped<ProductoServices>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
