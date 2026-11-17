@@ -10,7 +10,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 var Conexion = builder.Configuration.GetConnectionString("Conexion");
 builder.Services.AddDbContextFactory<VentaDeCafeContext>(options => options.UseSqlite(Conexion));
-builder.Services.AddScoped<service>();
+builder.Services.AddScoped<VentaServices>();
 
 var app = builder.Build();
 
