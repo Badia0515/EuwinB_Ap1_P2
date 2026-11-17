@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using EuwinB_Ap1_P2.Models;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace EuwinB_Ap1_P2.Service
+namespace EuwinB_Ap1_P2.Services
 {
     public class VentaServices(IDbContextFactory<VentaDeCafeContext> contextFactory) : IServiceResult<Venta, int>
     {

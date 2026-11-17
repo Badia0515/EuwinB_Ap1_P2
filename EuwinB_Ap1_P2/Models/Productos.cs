@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EuwinB_Ap1_P2.Model;
+namespace EuwinB_Ap1_P2.Models;
 
     public class Productos
     {

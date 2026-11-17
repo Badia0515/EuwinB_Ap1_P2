@@ -1,12 +1,14 @@
 ﻿<div class="col-auto input-group align-items-center">
     <label class="col-form-label input-group-text">Seleciones</label>
-
-    <InputSelect class="form-control form-select">
+    <InputSelect class="form-control form-select" @bind-Value="ProductoId">
         <option>Seleciones una</option>
-        
+        @foreach(var Producto in productos)
+        {
+            <option value="@Producto.ProductoId"> @Producto.Activo (@Producto.Precio)</option>
+        }
     </InputSelect>
-    <InputNumber class="form-control"/>
-    <button type="button" class="btn btn bg-primary  bi bi-plus" @onclick=""></button>
+    <InputNumber class="form-control" @bind-Value="Cantidad" />
+    <button type="button" class="btn btn bg-primary  bi bi-plus" @onclick="Tigger">Agregar</button>
 </div>
 @*Error*@
 @if (Error != null)
@@ -17,6 +19,28 @@
 }
 
 @code {
-    public string Error{ get; set; }
+    [Parameter]
+    public List<Productos> productos { get; set; } = [];
 
+    [Parameter]
+    public int ProductoId { get; set; }
+
+    [Parameter]
+    public int Cantidad { get; set; }
+
+    [Parameter]
+    public EventCallback<(Productos producto, int Cantidad)> OnProductoSelect { get; set; }
+    public string Error { get; set; } = string.Empty;
+    public async Task Tigger()
+    {
+        if (Cantidad > 0 && ProductoId > 0)
+        {
+            var seleciona = productos.Single(E => E.ProductoId == ProductoId);
+            await OnProductoSelect.InvokeAsync((seleciona, Cantidad));
+        }
+        else
+        {
+            Error = "Debes de seleccionar un producto";
+        }
+    }
 }

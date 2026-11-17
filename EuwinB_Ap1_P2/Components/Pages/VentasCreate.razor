@@ -1,0 +1,56 @@
+﻿@page "/"
+@inject ProductoServices productoService
+@inject VentaServices VentaServices
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+@code {
+    public List<Productos> productos { get; set; } = [];
+    public Venta VentaEntrada { get; set; } = new();
+    public VentaDetalle Detalle { get; set; } = new();
+    public string Error { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await productoService.GetList(R => R.Activo);
+        if (result.IsSuccess)
+        {
+            productos = result.Value;
+        }
+    }
+    public async Task handleProducto((Productos producto, int Cantidad) Seleccionar)
+    {
+        var entrada = VentaEntrada.ventaDetalles.Any(E => E.ProductoId == Seleccionar.producto.ProductoId);
+        if (entrada)
+        {
+            Error = "Ya fue Registrado";
+            return;
+        }
+        var Detalle = new VentaDetalle()
+        {
+            ProductoId = Seleccionar.producto.ProductoId,
+            Cantidad = Seleccionar.Cantidad,
+            Precio = Seleccionar.producto.Precio
+        };
+        VentaEntrada.ventaDetalles.Add(Detalle);
+        await Task.CompletedTask;
+    }
+    public async Task Guardar()
+    {
+        if (VentaEntrada.ventaDetalles == null || !VentaEntrada.ventaDetalles.Any())
+        {
+            Error = "Debes de registrar el detalle";
+            return;
+        }
+        VentaEntrada.Total = VentaEntrada.ventaDetalles.Sum(E => E.Cantidad * E.Precio);
+        var result = await VentaServices.Guardar(VentaEntrada);
+    }
+
+    public void Eliminar(VentaDetalle detalle)
+    {
+        VentaEntrada.ventaDetalles.Remove(detalle);
+        Detalle = detalle;
+    }
+}
