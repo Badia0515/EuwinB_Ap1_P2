@@ -20,7 +20,6 @@
                 <InputText @bind-Value="VentaEntrada.Observacion" />
                 <ValidationMessage For="@(()=>VentaEntrada.Observacion)" />
             </div>
-            @*Detalle*@
             <div class="card border-3">
                 <ProductoPicker productos="productos" OnProductoSelect="handleProducto"/>
                 <table class="table table-bordered">
