@@ -1,0 +1,123 @@
+﻿@page "/Venta/Edicion/{id:int}"
+@inject ProductoServices productoService
+@inject VentaServices VentaServices
+@inject NavigationManager navegacion
+@rendermode InteractiveServer
+<EditForm Model="VentaEntradaEdicion" OnValidSubmit="Guardar" FormName="Entrada">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card border-3">
+            <div class="mb-3">
+                <label>Fecha</label>
+                <InputDate @bind-Value="VentaEntradaEdicion.Fecha" />
+                <ValidationMessage For="@(() => VentaEntradaEdicion.Fecha)" />
+            </div>
+            <div class="mb-3">
+                <label>Observacion</label>
+                <InputText @bind-Value="VentaEntradaEdicion.Observacion" />
+                <ValidationMessage For="@(() => VentaEntradaEdicion.Observacion)" />
+            </div>
+            <div class="card border-3">
+                <ProductoPicker productos="productos" OnProductoSelect="handleProducto" />
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <td>Cantidad</td>
+                            <td>Precio</td>
+                            <td>Opciones</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Detalle in VentaEntradaEdicion.ventaDetalles)
+                        {
+                            <tr>
+                                <td>@Detalle.ProductoId</td>
+                                <td>@Detalle.Cantidad</td>
+                                <td>@Detalle.Precio</td>
+                                <td>
+                                    <button class="btn btn-danger" type="button" @onclick="() => Eliminar(Detalle)">Eliminar</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="btn btn-center">
+                <button class="btn btn-primary" type="submit">Guardar</button>
+                <button class="btn btn-warning" type="button" @onclick="Navegacion">Consultar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+@if (!string.IsNullOrEmpty(Error))
+{
+    <div class="alert alert-danger" role="alert">
+        @Error
+    </div>
+}
+@code {
+    public List<Productos> productos { get; set; } = [];
+    public Venta VentaEntradaEdicion { get; set; } = new();
+    public VentaDetalle Detalle { get; set; } = new();
+    public string Error { get; set; } = string.Empty;
+    [Parameter]
+    public int id{ get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Mostrar(id);
+    }
+    public async Task Mostrar(int id)
+    {
+
+        var result = await productoService.GetList(R => R.Activo);
+        if (result.IsSuccess)
+        {
+            productos = result.Value;
+        }
+        var resultEdicion = await VentaServices.Buscar(id);
+        if (resultEdicion.Value!= null)
+        {
+            VentaEntradaEdicion = resultEdicion.Value;
+        }
+    }
+    public async Task handleProducto((Productos producto, int Cantidad) Seleccionar)
+    {
+        var entrada = VentaEntradaEdicion.ventaDetalles.Any(E => E.ProductoId == Seleccionar.producto.ProductoId);
+        if (entrada)
+        {
+            Error = "Ya fue Registrado";
+            return;
+        }
+        var Detalle = new VentaDetalle()
+        {
+            ProductoId = Seleccionar.producto.ProductoId,
+            Cantidad = Seleccionar.Cantidad,
+            Precio = Seleccionar.producto.Precio
+        };
+        VentaEntradaEdicion.ventaDetalles.Add(Detalle);
+        await Task.CompletedTask;
+    }
+    public async Task Guardar()
+    {
+        if (VentaEntradaEdicion.ventaDetalles == null || !VentaEntradaEdicion.ventaDetalles.Any())
+        {
+            Error = "Debes de registrar el detalle";
+            return;
+        }
+        VentaEntradaEdicion.Total = VentaEntradaEdicion.ventaDetalles.Sum(E => E.Cantidad * E.Precio);
+        var result = await VentaServices.Guardar(VentaEntradaEdicion);
+    }
+
+    public void Eliminar(VentaDetalle detalle)
+    {
+        VentaEntradaEdicion.ventaDetalles.Remove(detalle);
+        Detalle = detalle;
+    }
+
+    public void Navegacion()
+    {
+        navegacion.NavigateTo("/Venta/index");
+    }
+}
