@@ -1,11 +1,49 @@
-﻿@page "/"
+﻿@page "/Vents/Create"
 @inject ProductoServices productoService
 @inject VentaServices VentaServices
-
-<PageTitle>Home</PageTitle>
-
-<h1>Hello, world!</h1>
-
+<EditForm Model="VentaEntrada" OnValidSubmit="Guardar" FormName="Entrada">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card border-3">
+            <div class="mb-3">
+                <label>Fecha</label>
+                <InputDate @bind-Value="VentaEntrada.Fecha" />
+            </div>
+            <div class="mb-3">
+                <label>Observacion</label>
+                <InputText @bind-Value="VentaEntrada.Observacion" />
+            </div>
+            <div class="card border-3">
+                <ProductoPicker productos="productos" OnProductoSelect="handleProducto"/>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <td>Producto</td>
+                            <td>Cantidad</td>
+                            <td>Precio</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Detalle in VentaEntrada.ventaDetalles)
+                        {
+                            <tr>
+                                <td>@Detalle.ProductoId</td>
+                                <td>@Detalle.Productos.Nombre</td>
+                                <td>@Detalle.Cantidad</td>
+                                <td>@Detalle.Precio</td>
+                                <td>
+                                    <button class="btn btn-warning"type="button"@onclick="() => Eliminar(Detalle)">Eliminar</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Guardar</button>
+    </div>
+</EditForm>
 @code {
     public List<Productos> productos { get; set; } = [];
     public Venta VentaEntrada { get; set; } = new();
@@ -32,6 +70,7 @@
         {
             ProductoId = Seleccionar.producto.ProductoId,
             Cantidad = Seleccionar.Cantidad,
+            Productos = Seleccionar.producto,
             Precio = Seleccionar.producto.Precio
         };
         VentaEntrada.ventaDetalles.Add(Detalle);
