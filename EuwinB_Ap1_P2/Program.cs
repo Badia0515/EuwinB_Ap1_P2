@@ -1,6 +1,6 @@
 using EuwinB_Ap1_P2.Components;
 using EuwinB_Ap1_P2.Context;
-using EuwinB_Ap1_P2.Service;
+using EuwinB_Ap1_P2.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

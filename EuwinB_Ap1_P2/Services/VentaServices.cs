@@ -1,5 +1,4 @@
 ﻿using Aplicada1.Core;
-using EuwinB_Ap1_P2.Model;
 using EuwinB_Ap1_P2.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

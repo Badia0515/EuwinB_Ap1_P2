@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using EuwinB_Ap1_P2.Model;
 
 namespace EuwinB_Ap1_P2.Models;
 

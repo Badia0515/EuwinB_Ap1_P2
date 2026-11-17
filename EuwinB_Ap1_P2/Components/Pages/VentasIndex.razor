@@ -1,10 +1,11 @@
-﻿@page "/counter"
+﻿@page "/Venta/Index"
+@inject ProductoServices productoService
+@inject VentaServices VentaServices
+@inject NavigationManager navegacion
 @rendermode InteractiveServer
-
 <div class="container">
-
     <div class="d-flex justify-content-between ">
-        <h4>Index</h4>
+        <h4>Ventas</h4>
         <button class="btn btn-primary bi bi-plus" @onclick="">Crear</button>
     </div>
     @*Filtrar*@
@@ -13,18 +14,94 @@
             <h6>Filtrar Por</h6>
             <h6>Busqueda</h6>
         </div>     
-        <div class="d-flex gap-5">
-            <select style="width:200px"@bind="">
-                <option></option>
-               
+       <div class="d-flex gap-5">
+            <select style="width:200px"@bind="Filtrar">
+                <option>Seleccione</option>
+                <option>VentaId</option>
+                <option>Concepto</option>
+                <option>Fecha</option>
             </select>
-            <input type="text" placeholder="Buscar"@bind="" />
-            <button class="btn btn-warning bi bi-search"@onclick=""></button>
+            <input type="text" placeholder="Buscar"@bind="FiltrarValor" />
+            <button class="btn btn-warning bi bi-search"@onclick="Filtro"></button>
+            <div>
+                <div class="col-3">
+                    <label class="col-form-label">Desde</label>
+                    <InputDate class="form-control" @bind-Value="FechaDesde"></InputDate>
+                </div>
+
+                <div class="col-3">
+                  <label class="col-form-label">Hasta</label>
+                    <div class="input-group">
+                       <InputDate class="form-control" @bind-Value="FechaHasta"></InputDate>
+                    </div>
+                </div>
+            </div>
+       </div>
+        <div class="card border-3 mt-3">
+            <QuickGrid Items="VentaEntrada.AsQueryable()" Class="table table-bordered">
+                <PropertyColumn Property="V => V.VentaId" Title="VentaId"Sortable="true"/>
+                <PropertyColumn Property="V => V.Fecha" Title="Fecha"Sortable="true" />
+                <PropertyColumn Property="V => V.Observacion" Title="Observacion"Sortable="true" />
+                <PropertyColumn Property="V => V.Total" Title="Total"Sortable="true" />
+                <TemplateColumn Title="Opciones">
+                    <button class="btn btn-warning bi bi-pen" @onclick="() => Editar(context.VentaId)">Editar </button>
+                    <button class="btn btn-danger bi bi-trash"@onclick="() => Eliminar(context.VentaId)">Eliminar</button>
+                </TemplateColumn>
+            </QuickGrid>
         </div>
-       
+        <div>
+            <label>Conteo de registros: @VentaEntrada.Count()</label>
+            <br />
+            <label>Total vendido: @VentaEntrada.Sum(V => V.Total)</label>
+        </div>
     </div>
 </div>
-
 @code {
-    
+    public List<Venta> VentaEntrada { get; set; } = [];
+    public string FiltrarValor { get; set; } = string.Empty;
+    public string Filtrar { get; set; } = string.Empty;
+    public DateTime? FechaDesde { get; set; }
+    public DateTime? FechaHasta { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await VentaServices.GetList(R => true);
+        if (result.IsSuccess)
+        {
+            VentaEntrada = result.Value;
+        }
+    }
+    public async Task Filtro()
+    {
+        if (FiltrarValor.Trim()!= "")
+        {
+            if (Filtrar == "VentaId")
+            {
+                int.TryParse(FiltrarValor, out int id);
+
+                var result = await VentaServices.GetList(R => R.VentaId == id);
+                VentaEntrada = result.Value;
+            }
+            else if (Filtrar == "Concepto")
+            {
+                var result = await VentaServices.GetList(R =>R.ventaDetalles.Any(D => D.Productos.Concepto.Contains(FiltrarValor)));
+                VentaEntrada = result.Value;
+            }
+            else if (Filtrar == "Fecha" && FechaDesde.HasValue && FechaHasta.HasValue)
+            {
+                var result = await VentaServices.GetList(V =>V.Fecha >= FechaDesde.Value && V.Fecha <= FechaHasta.Value);
+                VentaEntrada = result.Value;
+            }
+        }
+    }
+    public async Task Eliminar(int id)
+    {
+        await VentaServices.Eliminar(id);
+        var result = await VentaServices.GetList(R => true);
+        VentaEntrada = result.Value;
+    }
+    public void Editar(int id)
+    {
+        navegacion.NavigateTo($"/Venta/Edicion/{id}");
+    }
 }

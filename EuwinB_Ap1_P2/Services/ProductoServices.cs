@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Aplicada1.Core;
 using EuwinB_Ap1_P2.Context;
-using EuwinB_Ap1_P2.Model;
+using EuwinB_Ap1_P2.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EuwinB_Ap1_P2.Services
