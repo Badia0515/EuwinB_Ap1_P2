@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace EuwinB_Ap1_P2.Service
 {
-    public class service(IDbContextFactory<context> contextFactory) : IServiceResult<Productos, int>
+    public class service(IDbContextFactory<VentaDeCafeContext> contextFactory) : IServiceResult<Productos, int>
     {
         public Task<Result<Productos?>> Buscar(int id)
         {

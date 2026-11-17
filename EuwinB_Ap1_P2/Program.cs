@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 var Conexion = builder.Configuration.GetConnectionString("Conexion");
-builder.Services.AddDbContextFactory<context>(options => options.UseSqlite(Conexion));
+builder.Services.AddDbContextFactory<VentaDeCafeContext>(options => options.UseSqlite(Conexion));
 builder.Services.AddScoped<service>();
 
 var app = builder.Build();
