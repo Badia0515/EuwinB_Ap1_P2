@@ -13,7 +13,8 @@
         <div class="d-flex" style="gap:200px">
             <h6>Filtrar Por</h6>
             <h6>Busqueda</h6>
-        </div>     
+        </div>  
+        @*Opciones *@
        <div class="d-flex gap-5">
             <select style="width:200px; height:40px"@bind=" Filtrar">
                 <option>Seleccione</option>
@@ -21,13 +22,13 @@
                 <option>Concepto</option>
             </select>
             <input type="text" placeholder="Buscar" style="width:200px; height:40px" @bind="FiltrarValor" />
-           
+            @*fecha desde *@
             <div class="d-flex gap-2 mt-3">
                 <div class="d-flex gap-3">
                     <label class="col-form-label">Desde</label>
                     <InputDate class="form-control" @bind-Value="FechaDesde"></InputDate>
                 </div>
-
+                @*fecha Hasta *@
                 <div class="d-flex gap-3">
                   <label class="col-form-label">Hasta</label>
                     <div class="input-group">
@@ -37,6 +38,7 @@
             </div> 
             <button class="btn btn-warning bi bi-search"style="height:40px" @onclick="Filtro"></button>
        </div>
+        @*tabla *@
        <div class="card border-3 mt-3">
             <QuickGrid Items="VentaEntrada.AsQueryable()" Class="table table-bordered">
                 <PropertyColumn Property="V => V.VentaId" Title="VentaId"Sortable="true"/>

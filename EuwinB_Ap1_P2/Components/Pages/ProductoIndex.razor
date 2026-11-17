@@ -13,6 +13,7 @@
             <h6>Filtrar Por</h6>
             <h6>Busqueda</h6>
         </div>
+        @*opciones*@
         <div class="d-flex gap-5">
             <select style="width:200px; height:40px" @bind="Filtrar">
                 <option value="">Seleccione</option>
@@ -22,6 +23,7 @@
             <button class="btn btn-warning bi bi-search"style="height:40px" @onclick="Filtro">
             </button>
         </div>
+        @*Tabla*@
     </div>
     <div class="card border-3 mt-3">
         <QuickGrid Items="Entrada.AsQueryable()" Class="table table-bordered">
@@ -33,7 +35,7 @@
             <PropertyColumn Property="P => P.Activo" Title="Activo" Sortable="true"/>
         </QuickGrid>
     </div>
-
+    @*Total de regitro*@
     <div>
         <label>Registro Total: @Entrada.Count()</label>
     </div>

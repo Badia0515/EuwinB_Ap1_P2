@@ -6,17 +6,21 @@
 <EditForm Model="VentaEntrada" OnValidSubmit="Guardar" FormName="Entrada">
     <DataAnnotationsValidator/>
     <div class="container">
+        <h4>Registro de Venta</h4>
         <div class="card border-3">
+            @*Campo fecha*@
             <div class="mb-3">
                 <label>Fecha</label>
                 <InputDate @bind-Value="VentaEntrada.Fecha"/>
                 <ValidationMessage For="@(()=>VentaEntrada.Fecha)"/>
-            </div>
+            </div> 
+            @*Campo fecha*@
             <div class="mb-3">
                 <label>Observacion</label>
                 <InputText @bind-Value="VentaEntrada.Observacion" />
                 <ValidationMessage For="@(()=>VentaEntrada.Observacion)" />
             </div>
+            @*Detalle*@
             <div class="card border-3">
                 <ProductoPicker productos="productos" OnProductoSelect="handleProducto"/>
                 <table class="table table-bordered">
@@ -43,6 +47,7 @@
                     </tbody>
                 </table>
             </div>
+            @*Boton*@
             <div class="btn btn-center">
                 <button class="btn btn-primary" type="submit">Guardar</button>
                 <button class="btn btn-warning" type="button" @onclick="Navegacion">Consultar</button>

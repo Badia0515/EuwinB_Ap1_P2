@@ -7,16 +7,19 @@
     <DataAnnotationsValidator />
     <div class="container">
         <div class="card border-3">
+            @*Campo fecha*@
             <div class="mb-3">
                 <label>Fecha</label>
                 <InputDate @bind-Value="VentaEntradaEdicion.Fecha" />
                 <ValidationMessage For="@(() => VentaEntradaEdicion.Fecha)" />
             </div>
+            @*Campo Observacion*@
             <div class="mb-3">
                 <label>Observacion</label>
                 <InputText @bind-Value="VentaEntradaEdicion.Observacion" />
                 <ValidationMessage For="@(() => VentaEntradaEdicion.Observacion)" />
             </div>
+            @*Detalle*@
             <div class="card border-3">
                 <ProductoPicker productos="productos" OnProductoSelect="handleProducto" />
                 <table class="table table-bordered">
@@ -43,6 +46,7 @@
                     </tbody>
                 </table>
             </div>
+            @*Boton*@
             <div class="btn btn-center">
                 <button class="btn btn-primary" type="submit">Guardar</button>
                 <button class="btn btn-warning" type="button" @onclick="Navegacion">Consultar</button>
@@ -50,6 +54,7 @@
         </div>
     </div>
 </EditForm>
+@*Muestra el error*@
 @if (!string.IsNullOrEmpty(Error))
 {
     <div class="alert alert-danger" role="alert">
