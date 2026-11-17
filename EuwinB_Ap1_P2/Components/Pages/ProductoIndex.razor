@@ -1,0 +1,20 @@
+﻿@inject ProductoServices productoServices
+@rendermode InteractiveServer
+<h3>ProductoIndex</h3>
+
+@code {
+    public List<Productos> Entrada { get; set; } = [];
+    public string FiltrarValor { get; set; } = string.Empty;
+    public string Filtrar { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await productoServices.GetList(R => true);
+        if (result.IsSuccess)
+        {
+            Entrada = result.Value;
+        }
+
+    }
+}
+

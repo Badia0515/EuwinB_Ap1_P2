@@ -1,17 +1,21 @@
-﻿@page "/Vents/Create"
+﻿@page "/Venta/Create"
 @inject ProductoServices productoService
 @inject VentaServices VentaServices
+@inject NavigationManager navegacion
+@rendermode InteractiveServer
 <EditForm Model="VentaEntrada" OnValidSubmit="Guardar" FormName="Entrada">
     <DataAnnotationsValidator/>
     <div class="container">
         <div class="card border-3">
             <div class="mb-3">
                 <label>Fecha</label>
-                <InputDate @bind-Value="VentaEntrada.Fecha" />
+                <InputDate @bind-Value="VentaEntrada.Fecha"/>
+                <ValidationMessage For="@(()=>VentaEntrada.Fecha)"/>
             </div>
             <div class="mb-3">
                 <label>Observacion</label>
                 <InputText @bind-Value="VentaEntrada.Observacion" />
+                <ValidationMessage For="@(()=>VentaEntrada.Observacion)" />
             </div>
             <div class="card border-3">
                 <ProductoPicker productos="productos" OnProductoSelect="handleProducto"/>
@@ -19,9 +23,9 @@
                     <thead>
                         <tr>
                             <td>Id</td>
-                            <td>Producto</td>
                             <td>Cantidad</td>
                             <td>Precio</td>
+                            <td>Opciones</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -29,21 +33,29 @@
                         {
                             <tr>
                                 <td>@Detalle.ProductoId</td>
-                                <td>@Detalle.Productos.Nombre</td>
                                 <td>@Detalle.Cantidad</td>
                                 <td>@Detalle.Precio</td>
                                 <td>
-                                    <button class="btn btn-warning"type="button"@onclick="() => Eliminar(Detalle)">Eliminar</button>
+                                    <button class="btn btn-danger"type="button"@onclick="() => Eliminar(Detalle)">Eliminar</button>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
+            <div class="btn btn-center">
+                <button class="btn btn-primary" type="submit">Guardar</button>
+                <button class="btn btn-warning" type="button" @onclick="Navegacion">Consultar</button>
+            </div>
         </div>
-        <button class="btn btn-primary" type="submit">Guardar</button>
     </div>
 </EditForm>
+@if (!string.IsNullOrEmpty(Error))
+{
+    <div class="alert alert-danger" role="alert">
+        @Error
+    </div>
+}
 @code {
     public List<Productos> productos { get; set; } = [];
     public Venta VentaEntrada { get; set; } = new();
@@ -70,7 +82,6 @@
         {
             ProductoId = Seleccionar.producto.ProductoId,
             Cantidad = Seleccionar.Cantidad,
-            Productos = Seleccionar.producto,
             Precio = Seleccionar.producto.Precio
         };
         VentaEntrada.ventaDetalles.Add(Detalle);
@@ -91,5 +102,10 @@
     {
         VentaEntrada.ventaDetalles.Remove(detalle);
         Detalle = detalle;
+    }
+
+    public void Navegacion()
+    {
+        navegacion.NavigateTo("/Venta/index");
     }
 }

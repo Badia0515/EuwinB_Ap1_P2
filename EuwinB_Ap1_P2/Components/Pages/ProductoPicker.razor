@@ -1,17 +1,18 @@
-﻿<div class="col-auto input-group align-items-center">
+﻿@rendermode InteractiveServer
+<div class="col-auto input-group align-items-center">
     <label class="col-form-label input-group-text">Seleciones</label>
     <InputSelect class="form-control form-select" @bind-Value="ProductoId">
         <option>Seleciones una</option>
         @foreach(var Producto in productos)
         {
-            <option value="@Producto.ProductoId"> @Producto.Activo (@Producto.Precio)</option>
+            <option value="@Producto.ProductoId"> @Producto.Nombre (@Producto.Stock)</option>
         }
     </InputSelect>
     <InputNumber class="form-control" @bind-Value="Cantidad" />
     <button type="button" class="btn btn bg-primary  bi bi-plus" @onclick="Tigger">Agregar</button>
 </div>
 @*Error*@
-@if (Error != null)
+@if (!string.IsNullOrEmpty(Error))
 {
     <div class="alert alert-danger" role="alert">
         @Error
