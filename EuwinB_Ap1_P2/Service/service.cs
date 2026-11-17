@@ -6,9 +6,9 @@ using System.Linq.Expressions;
 
 namespace EuwinB_Ap1_P2.Service
 {
-    public class service(IDbContextFactory<context> contextFactory) : IServiceResult<model, int>
+    public class service(IDbContextFactory<context> contextFactory) : IServiceResult<Productos, int>
     {
-        public Task<Result<model?>> Buscar(int id)
+        public Task<Result<Productos?>> Buscar(int id)
         {
             throw new NotImplementedException();
         }
@@ -18,12 +18,12 @@ namespace EuwinB_Ap1_P2.Service
             throw new NotImplementedException();
         }
 
-        public Task<Result<List<model>>> GetList(Expression<Func<model, bool>> criterio)
+        public Task<Result<List<Productos>>> GetList(Expression<Func<Productos, bool>> criterio)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result> Guardar(model entidad)
+        public Task<Result> Guardar(Productos entidad)
         {
             throw new NotImplementedException();
         }

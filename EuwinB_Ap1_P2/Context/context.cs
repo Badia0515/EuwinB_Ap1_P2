@@ -8,6 +8,6 @@ namespace EuwinB_Ap1_P2.Context
         public context(DbContextOptions<context>options):base(options)
         {
         }
-        public DbSet<model> model { get; set; }
+        public DbSet<Productos> model { get; set; }
     }
 }
